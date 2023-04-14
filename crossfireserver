@@ -1,0 +1,82 @@
+#!/usr/bin/perl
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 1, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+my $CROSSFIREDIR = "/home/crossfire/crossfire-startup";
+
+my $Command = $ARGV[0];
+if ($Command eq "")
+{
+	$Command = "NONE";
+}
+
+my $running=`ps ax|grep crossfire-server|grep -v grep`;
+
+if ($Command eq "start")
+{
+	if ($running eq "")
+	{
+		print "Starting Crossfire...\n";
+		if (-f "$CROSSFIREDIR/nostart")
+		{
+			print "Removing $CROSSFIREDIR/nostart\n";
+			# Remove the lock file if it exists
+			unlink("$CROSSFIREDIR/nostart");
+		}
+		# Start the screen process
+		system("nohup $CROSSFIREDIR/startcrossfire-server > $CROSSFIREDIR/CrossfireStartup.log\&");
+	}
+}
+elsif ($Command eq "stop")
+{
+	print "Stopping Crossfire server process...\n";
+	system("touch '$CROSSFIREDIR/nostart'");
+	if ($running ne "")
+	{
+		# Process is running, kill it
+		system("killall crossfire-server");
+	}
+}
+elsif ($Command eq "restart")
+{
+	if (-f "$CROSSFIREDIR/nostart")
+	{
+		print("Removing $CROSSFIREDIR/nostart\n");
+		unlink("$CROSSFIREDIR/nostart");
+	}
+	if ($running ne "")
+	{
+		system("killall crossfire-server");
+	}
+}
+elsif ($Command eq "status")
+{
+	if ($running ne "")
+	{
+		print("Crossfire Server Running\n");
+	}
+	else
+	{
+		print("Crossfire Server Not Running\n");
+	}
+}
+else
+{
+	print ("Uknown command '$Command'\n");
+	print ("Usage: $0 {start|status|stop|restart}\n");
+	exit(1);
+}
+
+exit(0);
