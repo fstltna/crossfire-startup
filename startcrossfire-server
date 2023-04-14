@@ -52,12 +52,12 @@ while (-1)
 			# The Log Entry
 			my $datestring = localtime();
 			my $TIME="Crossfire server Down, Restarting: $datestring";
-			open(OUTF, ">>$CROSSFIREDIR/WesnothdScreen.log") || die "Unable to open $CROSSFIREDIR/WesnothdScreen.log for appending";
+			open(OUTF, ">>$CROSSFIREDIR/CrossfireScreen.log") || die "Unable to open $CROSSFIREDIR/CrossfireScreen.log for appending";
 			print (OUTF "$TIME\n");
 			close($OUTF);
 			chdir "$CROSSFIREDIR";
 			print "Starting screen process\n";
-			system("$SCREENCMD -fa -S Crossfire -d -U -m $CROSSFIREDIR/runcrossfire-server");
+			system("$SCREENCMD -fa -S Crossfire -d -U -m $CROSSFIREDIR/runcrossfireserver");
 		}
 	}
 	# Sleep for 1 minute before checking again

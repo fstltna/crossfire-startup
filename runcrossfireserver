@@ -1,4 +1,5 @@
 #!/bin/bash
 #/usr/sbin/crossfire-server wesnothd -t 10 -v -c /home/wesnothowner/wesnoth/wesnothC
 /usr/sbin/crossfire-server
+#nohup /usr/sbin/crossfire-server &
 exit 0
